@@ -1,0 +1,5 @@
+interface:
+  display_name: "Explain Diff"
+  short_description: "Align your model of a diff, draft comments"
+policy:
+  allow_implicit_invocation: false

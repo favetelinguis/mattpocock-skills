@@ -1,0 +1,3 @@
+interface:
+  display_name: "External Integration Design"
+  short_description: "Design resilient external integrations"
