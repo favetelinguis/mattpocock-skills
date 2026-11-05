@@ -12,7 +12,6 @@ skills=(
   engineering/codebase-design
   engineering/diagnosing-bugs
   engineering/domain-modeling
-  engineering/grill-with-docs
   engineering/implement
   engineering/implement-spec
   engineering/improve-codebase-architecture
