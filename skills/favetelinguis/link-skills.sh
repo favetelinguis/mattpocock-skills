@@ -39,6 +39,7 @@ skills=(
   # Personal
   favetelinguis/explain-diff
   favetelinguis/external-integration-design
+  favetelinguis/matt-beads
 )
 
 # Keep the destination a real directory so links cannot land in the repo.

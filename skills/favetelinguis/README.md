@@ -4,6 +4,7 @@ Personal skills, including specializations for personal repositories and convent
 
 - **[explain-diff](./explain-diff/SKILL.md)**: Explain a diff or PR in your own words, get grilled until your model matches the code, and leave with review comments.
 - **[external-integration-design](./external-integration-design/SKILL.md)**: Design resilient integrations with external systems and providers.
+- **[matt-beads](./matt-beads/SKILL.md)**: Use Beads (`bd`) in an external workspace outside the repository with Matt's engineering skills.
 
 [link-skills.sh](./link-skills.sh) links the selected engineering, productivity, and personal skills into `~/.agents/skills`.
 
