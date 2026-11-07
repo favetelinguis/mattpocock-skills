@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ship PR"
+  short_description: "Write a PR body with ship gate and infra deploy checks"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Observability"
+  short_description: "Instrument logs, RED/USE metrics, traces, and alerts"
