@@ -15,7 +15,7 @@ skills=(
   engineering/grill-with-docs
   engineering/implement
   engineering/improve-codebase-architecture
-  # engineering/pr
+  engineering/pr
   engineering/prototype
   engineering/research
   engineering/retro
@@ -42,7 +42,6 @@ skills=(
   favetelinguis/infra-and-deploy
   favetelinguis/matt-beads
   favetelinguis/observability
-  favetelinguis/ship-pr
 )
 
 # Keep the destination a real directory so links cannot land in the repo.

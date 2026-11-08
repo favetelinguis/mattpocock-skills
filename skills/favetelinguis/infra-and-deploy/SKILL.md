@@ -11,11 +11,11 @@ In a repository with co-located infrastructure, **checking application code and 
 
 Classify every touched seam into one of three tiers so you never overclaim what local checks prove:
 
-| Tier | Seam | What local checks prove | What only a deploy proves |
-|---|---|---|---|
-| **1. Application** | Pure domain logic, UI, local DB queries | Behavior at the seam | Production load and vendor quirks |
-| **2. Rendered Infra** | Helm, Kustomize, Dockerfile, Terraform, Bicep, CDK, CI YAML | Templates render, schemas validate, images build | Live state compatibility, permissions, quotas, secret values |
-| **3. Live Boundary** | AWS/Azure/GCP resources, K8s cluster, IAM/Workload Identity, DNS/TLS, stateful migrations | **Nothing** | **Everything** |
+| Tier                  | Seam                                                                                      | What local checks prove                          | What only a deploy proves                                    |
+| --------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| **1. Application**    | Pure domain logic, UI, local DB queries                                                   | Behavior at the seam                             | Production load and vendor quirks                            |
+| **2. Rendered Infra** | Helm, Kustomize, Dockerfile, Terraform, Bicep, CDK, CI YAML                               | Templates render, schemas validate, images build | Live state compatibility, permissions, quotas, secret values |
+| **3. Live Boundary**  | AWS/Azure/GCP resources, K8s cluster, IAM/Workload Identity, DNS/TLS, stateful migrations | **Nothing**                                      | **Everything**                                               |
 
 ## Process
 

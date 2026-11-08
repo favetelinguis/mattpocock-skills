@@ -25,11 +25,11 @@ On-call questions:
 
 Map each question to the signal that answers it:
 
-| Signal | Answers | Cost profile |
-|---|---|---|
-| **Metric** | **That** something is wrong (rate, error ratio, percentile latency, saturation) | Fixed per label combination; cheap to query and alert on |
-| **Trace** | **Where** time or failure went across services, queues, and DB calls | Per-request; sampled |
-| **Structured log** | **Why** a specific execution took the path it did | Per-event; grows with traffic |
+| Signal             | Answers                                                                         | Cost profile                                             |
+| ------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Metric**         | **That** something is wrong (rate, error ratio, percentile latency, saturation) | Fixed per label combination; cheap to query and alert on |
+| **Trace**          | **Where** time or failure went across services, queues, and DB calls            | Per-request; sampled                                     |
+| **Structured log** | **Why** a specific execution took the path it did                               | Per-event; grows with traffic                            |
 
 Reuse the project's existing logger, metrics registry, and OpenTelemetry setup before introducing new libraries. When designing a new logging or telemetry seam, call the Skill tool with "codebase-design" so instrumentation sits behind a deep module or middleware boundary rather than leaking SDK calls across domain code.
 
@@ -74,7 +74,7 @@ Write every log entry as a structured JSON record with a stable `event` name and
 
 ### 5. Configure symptom-based alerts and runbooks
 
- When the change introduces or modifies alerting or production health gates:
+When the change introduces or modifies alerting or production health gates:
 
 - **Page on user-visible symptoms**, such as elevated error rate, high p99 latency, or growing queue age. Keep cause signals (CPU, memory, single pod restart) on dashboards rather than pagers.
 - **Use two severities only**: `page` (user-facing impact, act now) and `ticket` (degradation or capacity trend, act this week).
