@@ -7,7 +7,6 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 - **[explain-diff](./explain-diff/SKILL.md)**: Explain a diff or PR in your own words, get grilled until your model matches the code, and leave with review comments (complements `code-review` and `grilling`).
 - **[external-integration-design](./external-integration-design/SKILL.md)**: Design resilient integrations with external systems and providers (complements `codebase-design` and `tdd` at third-party boundaries).
 - **[infra-and-deploy](./infra-and-deploy/SKILL.md)**: Trace app-to-infrastructure chains across Helm, Kubernetes, AWS, Azure, Terraform, Bicep, Docker, and CI/CD, and surface what only a live deploy can verify (complements `implement`, `tdd`, and `wizard`).
-- **[matt-beads](./matt-beads/SKILL.md)**: Use `beads_rust` (`br`) across single or multi-repo setups with Matt's engineering skills without forcing the team to migrate (complements `setup-matt-pocock-skills`).
 - **[observability](./observability/SKILL.md)**: Instrument production code with structured logging, RED and USE metrics, OpenTelemetry tracing, symptom-based alerts, and runbooks (complements `diagnosing-bugs` and `implement`).
 - **[ship-pr](./ship-pr/SKILL.md)**: Write a PR body with a visual summary, local vs deploy-only verification evidence, infrastructure chain trace, and rollback plan.
 
@@ -15,7 +14,7 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 
 | Upstream stage | Matt's skills | How `favetelinguis` complements it |
 |---|---|---|
-| **Setup & Tracker** | `setup-matt-pocock-skills`, `triage`, `wayfinder` | `matt-beads` provides the local/multi-repo `br` tracker config without touching team git files |
+| **Setup & Tracker** | `setup-matt-pocock-skills`, `triage`, `wayfinder` | No personal add-on; upstream tracker setup applies as-is |
 | **Spec & Slices** | `grill-with-docs`, `to-spec`, `to-tickets` | `infra-and-deploy` and `observability` separate locally testable seams from deploy-only seams and enforce expand-contract ticket ordering |
 | **Build** | `implement`, `tdd`, `codebase-design`, `wizard` | `external-integration-design`, `observability`, and `infra-and-deploy` guide adapter resilience, permanent telemetry, and full `App -> Container -> Helm/K8s -> Cloud IaC -> CI/CD` parity |
 | **Review & Diagnose** | `code-review`, `diagnosing-bugs` | `explain-diff` aligns the human reviewer's mental model with the diff; `observability` turns temporary debug probes into permanent signals |
@@ -29,7 +28,7 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 bash skills/favetelinguis/link-skills.sh
 ```
 
-Edit the `skills` list in the script to choose what is installed. All 31 selected skills are included. Remove or comment out an entry and rerun to unlink it. New skills must be added to the list explicitly.
+Edit the `skills` list in the script to choose what is installed. All 30 selected skills are included. Remove or comment out an entry and rerun to unlink it. New skills must be added to the list explicitly.
 
 Running the script repeatedly is safe. It replaces selected symlinks, refuses to overwrite real files or directories, and only removes deselected links pointing to this checkout. Unrelated skills stay installed.
 

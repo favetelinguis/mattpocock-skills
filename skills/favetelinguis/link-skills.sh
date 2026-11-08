@@ -40,7 +40,6 @@ skills=(
   favetelinguis/explain-diff
   favetelinguis/external-integration-design
   favetelinguis/infra-and-deploy
-  favetelinguis/matt-beads
   favetelinguis/observability
 )
 
