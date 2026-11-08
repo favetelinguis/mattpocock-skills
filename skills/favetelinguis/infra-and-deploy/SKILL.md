@@ -78,7 +78,7 @@ When provisioning credentials, CI secrets, or manual cloud dashboard steps are r
 
 ### 5. Emit the mandatory Deploy-Only Verification Warning
 
-Whenever a change touches Tier 2 or Tier 3, include an explicit **Unverified Until Deploy** warning in your report and handoff (and feed it into `ship-pr` when opening a PR). State:
+Whenever a change touches Tier 2 or Tier 3, include an explicit **Unverified Until Deploy** warning in your report and handoff. State:
 
 1. **What was verified locally (Tier 1 & 2)**: unit tests, rendered manifest diffs, static validation commands run.
 2. **What cannot be verified until deploy (Tier 3)**: the exact live boundaries (IAM/RBAC role bindings, secret existence in KeyVault/Secrets Manager, live cluster admission/upgrade, DNS/ingress routing, stateful migration execution).

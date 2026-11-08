@@ -8,17 +8,16 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 - **[external-integration-design](./external-integration-design/SKILL.md)**: Design resilient integrations with external systems and providers (complements `codebase-design` and `tdd` at third-party boundaries).
 - **[infra-and-deploy](./infra-and-deploy/SKILL.md)**: Trace app-to-infrastructure chains across Helm, Kubernetes, AWS, Azure, Terraform, Bicep, Docker, and CI/CD, and surface what only a live deploy can verify (complements `implement`, `tdd`, and `wizard`).
 - **[observability](./observability/SKILL.md)**: Instrument production code with structured logging, RED and USE metrics, OpenTelemetry tracing, symptom-based alerts, and runbooks (complements `diagnosing-bugs` and `implement`).
-- **[ship-pr](./ship-pr/SKILL.md)**: Write a PR body with a visual summary, local vs deploy-only verification evidence, infrastructure chain trace, and rollback plan.
+- **[setup-matt-skills-with-beads](./setup-matt-skills-with-beads/SKILL.md)**: Configure a repo for the engineering skills with a personal beads_rust (`br`) tracker kept out of git, wired through one block in the global `AGENTS.md` (replaces `setup-matt-pocock-skills`).
 
 ## How they fit into Matt's flow
 
 | Upstream stage | Matt's skills | How `favetelinguis` complements it |
 |---|---|---|
-| **Setup & Tracker** | `setup-matt-pocock-skills`, `triage`, `wayfinder` | No personal add-on; upstream tracker setup applies as-is |
+| **Setup & Tracker** | `setup-matt-pocock-skills`, `triage`, `wayfinder` | `setup-matt-skills-with-beads` replaces upstream setup: a personal `.beads/` excluded through `.git/info/exclude`, and a beads tracker doc adding `discovered-from`, `--external-ref`, native acceptance criteria, priority, and defer |
 | **Spec & Slices** | `grill-with-docs`, `to-spec`, `to-tickets` | `infra-and-deploy` and `observability` separate locally testable seams from deploy-only seams and enforce expand-contract ticket ordering |
 | **Build** | `implement`, `tdd`, `codebase-design`, `wizard` | `external-integration-design`, `observability`, and `infra-and-deploy` guide adapter resilience, permanent telemetry, and full `App -> Container -> Helm/K8s -> Cloud IaC -> CI/CD` parity |
 | **Review & Diagnose** | `code-review`, `diagnosing-bugs` | `explain-diff` aligns the human reviewer's mental model with the diff; `observability` turns temporary debug probes into permanent signals |
-| **Ship** | `implement`, `code-review` | `ship-pr` formats the visual PR summary and adds the `Unverified Until Deploy` warning, live plan/what-if commands, post-deploy telemetry checks, and rollback plan |
 
 ## Linking skills
 

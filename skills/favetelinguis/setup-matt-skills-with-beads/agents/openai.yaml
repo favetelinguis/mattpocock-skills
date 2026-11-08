@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Matt Skills with Beads"
+  short_description: "Configure a repo for the skills on beads_rust"
+policy:
+  allow_implicit_invocation: false

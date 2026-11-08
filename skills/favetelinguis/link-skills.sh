@@ -19,7 +19,6 @@ skills=(
   engineering/prototype
   engineering/research
   engineering/retro
-  engineering/setup-matt-pocock-skills
   engineering/tdd
   engineering/to-spec
   engineering/to-tickets
@@ -41,6 +40,7 @@ skills=(
   favetelinguis/external-integration-design
   favetelinguis/infra-and-deploy
   favetelinguis/observability
+  favetelinguis/setup-matt-skills-with-beads
 )
 
 # Keep the destination a real directory so links cannot land in the repo.
