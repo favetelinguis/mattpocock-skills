@@ -68,26 +68,26 @@ The three "needs attention" buckets, oldest first:
 
 Use exactly these five types. `br` accepts any string for `-t`, so this list is the guard.
 
-| Type      | Use it for                                                                                 |
-| --------- | ------------------------------------------------------------------------------------------ |
-| `bug`     | Something broken: triage's `bug` category, or a defect found while working                 |
-| `feature` | Triage's `enhancement` category                                                            |
+| Type      | Use it for                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------ |
+| `bug`     | Something broken: triage's `bug` category, or a defect found while working                             |
+| `feature` | Triage's `enhancement` category                                                                        |
 | `task`    | A `/to-tickets` vertical slice; every wayfinder ticket (its `wayfinder:<type>` label carries the kind) |
-| `chore`   | Expand-contract and mechanical refactor tickets; upkeep that changes no behaviour          |
-| `epic`    | A spec, or a wayfinder map (label `wayfinder:map`)                                         |
+| `chore`   | Expand-contract and mechanical refactor tickets; upkeep that changes no behaviour                      |
+| `epic`    | A spec, or a wayfinder map (label `wayfinder:map`)                                                     |
 
 ### Links
 
 Use these six dependency types and leave the rest unused:
 
-| Type              | Meaning: `br dep add <A> <B> -t <type>`                   | Blocks `br ready`? |
-| ----------------- | --------------------------------------------------------- | ------------------ |
-| `blocks`          | A waits on B                                              | yes                |
-| `parent-child`    | A is a child of B (set through `--parent`)                | the parent, until its children close |
-| `discovered-from` | A was found while working B                               | no                 |
-| `duplicates`      | A duplicates B                                            | no                 |
-| `supersedes`      | A's decision overturns closed B's                         | no                 |
-| `caused-by`       | Bug A was introduced by B's change                        | no                 |
+| Type              | Meaning: `br dep add <A> <B> -t <type>`    | Blocks `br ready`?                   |
+| ----------------- | ------------------------------------------ | ------------------------------------ |
+| `blocks`          | A waits on B                               | yes                                  |
+| `parent-child`    | A is a child of B (set through `--parent`) | the parent, until its children close |
+| `discovered-from` | A was found while working B                | no                                   |
+| `duplicates`      | A duplicates B                             | no                                   |
+| `supersedes`      | A's decision overturns closed B's          | no                                   |
+| `caused-by`       | Bug A was introduced by B's change         | no                                   |
 
 - **`supersedes`**: when a wayfinder resolution overturns an earlier decision, link the new ticket to the old one.
 - **`caused-by`**: when `/diagnosing-bugs` traces a bug to the change a specific closed ticket shipped, link the bug to that ticket.
@@ -128,7 +128,3 @@ Triage sets it, `/to-tickets` copies the spec's priority onto each ticket, and w
 ### Pausing
 
 Defer only when the user asks to park work. Deferring an epic leaves its children in `br ready`, so defer the epic together with every open descendant: walk the tree with `br dep list <id> --direction up -t parent-child --json` from the epic down, then run `br defer <epic> <descendant> ... --transition-comment "<why>"`. Resume with `br undefer` on the same ids. A `needs-info` wait stays a label, never a defer.
-
-### Viewer
-
-Agents run `br` alone. `bv` (beads_viewer) is the human's view of the same `.beads/`.
