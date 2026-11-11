@@ -8,6 +8,7 @@ destination="$HOME/.agents/skills"
 skills=(
   # Engineering
   engineering/ask-matt
+  engineering/code-review
   engineering/codebase-design
   engineering/diagnosing-bugs
   engineering/domain-modeling
@@ -35,7 +36,7 @@ skills=(
   productivity/writing-for-agents
 
   # Personal
-  favetelinguis/code-review
+  favetelinguis/production-readiness-check
   favetelinguis/explain-diff
   favetelinguis/external-integration-design
   favetelinguis/infra-and-deploy

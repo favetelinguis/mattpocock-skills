@@ -38,10 +38,10 @@ Done when `git diff --stat <base> <head>` is non-empty. An empty diff means ther
 Dispatch the blind reviewer now, before the human says anything about the change, and continue to step 3 while it runs. Its prompt carries:
 
 - The worktree path, with the instruction to work only inside it.
-- The instruction to call the Skill tool with "code-review", using `<base>` as the fixed point.
-- The tracker doc path and, for a PR, the PR URL, so code-review can find the originating spec.
-- The human is out of reach: where code-review would ask the user, take its "no spec available" branch. If the reviewer cannot dispatch sub-agents of its own, it runs the Standards and Spec axes one after the other, each in its own section.
-- The brief: "Return the code-review report as code-review presents it."
+- The instruction to call the Skill tool with "production-readiness-check", using `<base>` as the fixed point.
+- The tracker doc path and, for a PR, the PR URL, so production-readiness-check can find the originating spec.
+- The human is out of reach: where production-readiness-check would ask the user, take its "no spec available" branch. If the reviewer cannot dispatch sub-agents of its own, it runs each axis (Standards, Spec, Production, and Integration when it applies) one after the other, each in its own section.
+- The brief: "Return the production-readiness-check report as production-readiness-check presents it."
 
 ### 3. Take the mental model
 

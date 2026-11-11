@@ -1,15 +1,16 @@
 ---
-name: code-review
-description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along three axes: Standards (does the code follow this repo's documented coding standards?), Spec (does the code match what the originating issue/spec asked for?), and Production (is it ready to deploy, operate, and observe?). Runs the reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+name: production-readiness-check
+description: "Multi-axis diff review (Standards, Spec, Production, Integration) that explain-diff's blind reviewer runs. Use when explain-diff dispatches its blind reviewer."
 ---
 
 Specializes engineering/code-review.
 
-Three-axis review of the diff between `HEAD` and a fixed point the user supplies:
+Multi-axis review of the diff between `HEAD` and a fixed point the user supplies:
 
 - **Standards**: does the code conform to this repo's documented coding standards?
 - **Spec**: does the code faithfully implement the originating issue / spec?
 - **Production**: is the change ready for production: infrastructure and deployment parity, rollout safety, and observability?
+- **Integration**: is every new or changed external integration resilient? Runs only when the diff contains one.
 
 All axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings. Start every sub-agent with a fresh context window.
 
@@ -23,7 +24,7 @@ Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main
 
 Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
 
-Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside three parallel sub-agents.
+Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside the parallel sub-agents.
 
 ### 2. Identify the spec source
 
@@ -58,9 +59,15 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 - **Middle Man**: a class or function that mostly just delegates onward. → cut it, call the real target direct.
 - **Refused Bequest**: a subclass or implementer that ignores or overrides most of what it inherits. → drop the inheritance, use composition.
 
-### 4. Spawn all three sub-agents in parallel
+### 4. Detect external integrations
 
-Issue all three sub-agent calls together, in the foreground, and aggregate the reports they return.
+An **external integration** is code that talks to a system this repo does not own: a third-party or internal-service API client (REST, GraphQL, gRPC, SOAP), a vendor or cloud SDK, a model provider, a payment gateway, an outbound webhook or inbound webhook handler, or a queue or event-stream subscription to another system's events. Scan the diff for hunks that add one or change how one is called (endpoint, payload, auth, timeout, retry, error handling, client config, dependency version).
+
+**Done when:** you hold either the list of integration hunks (file + hunk + the external system each one talks to) or a confirmed "no external integration changed". The Integration sub-agent runs only on a non-empty list.
+
+### 5. Spawn the sub-agents in parallel
+
+Issue every sub-agent call together (Standards, Spec, Production, and Integration when step 4 found any), in the foreground, and aggregate the reports they return.
 
 **Standards sub-agent prompt** should include:
 
@@ -80,11 +87,18 @@ Issue all three sub-agent calls together, in the foreground, and aggregate the r
 - The instruction to call the Skill tool twice, for "infra-and-deploy" and "observability", and to review the diff against both skills.
 - The brief: "Report, per file/hunk where relevant: (a) infrastructure and deployment gaps: the app-to-infrastructure chain left incomplete (environment variables, secrets, ports, probes, permissions, cloud resources, CI/CD), unsafe migrations or rollout ordering, and what only a live deploy can verify; (b) observability gaps: new endpoints, jobs, queues, or external calls lacking structured logs, RED or USE metrics, traces, alerts, or runbooks, and debug probes that should become permanent signals. Cite the skill each finding comes from. Distinguish blockers from recommendations. If the diff has no production surface, say so. Under 400 words."
 
-If the spec is missing, skip the Spec sub-agent and note this in the final report.
+**Integration sub-agent prompt** should include:
 
-### 5. Aggregate
+- The diff command and commit list.
+- The integration hunk list from step 4.
+- The instruction to call the Skill tool with "external-integration-design" and to review each listed integration against it.
+- The brief: "Report, per integration: missing or wrong adapter boundary, timeouts, retries with backoff, idempotency for retried writes, rate limiting and 429 handling, circuit breaking, error mapping, transactional outbox where a DB write and an external call must agree, and test seams at the boundary. Quote the hunk for each finding. Distinguish blockers from recommendations. Under 400 words."
 
-Present the three reports under `## Standards`, `## Spec`, and `## Production` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the axes are deliberately separate (see _Why separate axes_).
+If the spec is missing, skip the Spec sub-agent and note this in the final report. If step 4 found no integration, skip the Integration sub-agent and note "no external integration changed".
+
+### 6. Aggregate
+
+Present the reports under `## Standards`, `## Spec`, `## Production`, and `## Integration` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the axes are deliberately separate (see _Why separate axes_).
 
 End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes: that's the reranking the separation exists to prevent.
 
@@ -95,5 +109,6 @@ A change can pass one axis and fail another:
 - Code that follows every standard but implements the wrong thing → **Standards pass, Spec fail.**
 - Code that does exactly what the issue asked but breaks the project's conventions → **Spec pass, Standards fail.**
 - Code that is clean and correct but ships without its config, migration ordering, or telemetry → **Standards and Spec pass, Production fail.**
+- Code that deploys and is observed but calls a vendor with no timeout or retry safety → **Production pass, Integration fail.**
 
 Reporting them separately stops one axis from masking another.

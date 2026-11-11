@@ -2,9 +2,9 @@
 
 Personal skills that complement or customize Matt's `engineering/` and `productivity/` skills.
 
-Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-spec` -> `to-tickets` -> `implement` / `tdd` -> `code-review` -> `retro`). Most skills in this folder fill in personal tooling, production operations, and infrastructure gaps. The personal `code-review` is an independent copy of the upstream skill, selected in place of the upstream version:
+Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-spec` -> `to-tickets` -> `implement` / `tdd` -> `code-review` -> `retro`). Most skills in this folder fill in personal tooling, production operations, and infrastructure gaps. `production-readiness-check` is an independent copy of upstream `code-review` with Production and Integration axes, used only by `explain-diff`:
 
-- **[code-review](./code-review/SKILL.md)**: Review a diff on three parallel axes: documented standards, the originating spec, and production readiness (via `infra-and-deploy` and `observability`).
+- **[production-readiness-check](./production-readiness-check/SKILL.md)**: The blind review `explain-diff` runs, on parallel axes: documented standards, the originating spec, production readiness (via `infra-and-deploy` and `observability`), and, when the diff touches an external integration, integration resilience (via `external-integration-design`).
 - **[explain-diff](./explain-diff/SKILL.md)**: Explain a diff or PR in your own words, get grilled until your model matches the code, and leave with review comments (complements `code-review` and `grilling`).
 - **[external-integration-design](./external-integration-design/SKILL.md)**: Design resilient integrations with external systems and providers (complements `codebase-design` and `tdd` at third-party boundaries).
 - **[infra-and-deploy](./infra-and-deploy/SKILL.md)**: Trace app-to-infrastructure chains across Helm, Kubernetes, AWS, Azure, Terraform, Bicep, Docker, and CI/CD, and surface what only a live deploy can verify (complements `implement`, `tdd`, and `wizard`).
@@ -18,7 +18,7 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 | **Setup & Tracker** | `setup-matt-pocock-skills`, `triage`, `wayfinder` | `setup-matt-skills-with-beads` replaces upstream setup: a personal `.beads/` excluded through `.git/info/exclude`, and a beads tracker doc adding `discovered-from`, `--external-ref`, native acceptance criteria, priority, and defer |
 | **Spec & Slices** | `grill-with-docs`, `to-spec`, `to-tickets` | `infra-and-deploy` and `observability` separate locally testable seams from deploy-only seams and enforce expand-contract ticket ordering |
 | **Build** | `implement`, `tdd`, `codebase-design`, `wizard` | `external-integration-design`, `observability`, and `infra-and-deploy` guide adapter resilience, permanent telemetry, and full `App -> Container -> Helm/K8s -> Cloud IaC -> CI/CD` parity |
-| **Review & Diagnose** | `code-review`, `diagnosing-bugs` | The personal `code-review` replaces the upstream link; `explain-diff` aligns the human reviewer's mental model with the diff; `observability` turns temporary debug probes into permanent signals |
+| **Review & Diagnose** | `code-review`, `diagnosing-bugs` | `explain-diff` aligns the human reviewer's mental model with the diff, using `production-readiness-check` as its blind review; `observability` turns temporary debug probes into permanent signals |
 
 ## Linking skills
 
