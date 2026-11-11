@@ -1,23 +1,17 @@
 ---
 name: external-integration-design
-description: "Use when designing, researching, implementing, reviewing, or refactoring an integration with an external system or provider, including feasibility research or deciding whether to add one. Covers third-party APIs, model providers such as OpenRouter, vendor SDKs, REST/GraphQL/gRPC/SOAP clients, legacy services, payment gateways, webhooks, and event subscriptions. Also use when handling 429s, timeouts, flaky vendors, duplicate requests, or DB/API state drift. Guides use of adapters, timeouts, retries, circuit breakers, rate limiting, idempotency, and transactional outbox."
+description: "External-integration resilience reference for production-readiness-check's Integration reviewer. Use when production-readiness-check calls it."
 ---
 
 # External Integration Design
 
 Language-agnostic. Apply to any code that crosses a boundary to a system you do not control.
 
-## Workflow
+## The boundary
 
-1. Identify the boundary: vendor, protocol, direction (outbound call, inbound webhook, or both),
-   and whether each operation is read-only, idempotent, or state-changing.
-2. Walk the pattern checklist below. For each item, apply it or state in one line why it does not
-   apply. Do not skip silently.
-3. Reuse the project's existing resilience, config, secret, and logging libraries before adding new ones.
-4. Implement, then run the verification checklist against the result.
-5. Read [references/patterns.md](references/patterns.md) for mechanism details (backoff formula,
-   breaker parameters, rate-limit headers, outbox schema, webhook handling) when implementing
-   any item you are not certain about.
+Each integration is characterised by its vendor, protocol, direction (outbound call, inbound webhook, or both), and whether each operation is read-only, idempotent, or state-changing. Every item in the pattern checklist either applies or carries a one-line reason it does not. The project's existing resilience, config, secret, and logging libraries come before new ones.
+
+Mechanism details (backoff formula, breaker parameters, rate-limit headers, outbox schema, webhook handling) are in [references/patterns.md](references/patterns.md).
 
 ## Pattern checklist
 
@@ -90,8 +84,6 @@ Language-agnostic. Apply to any code that crosses a boundary to a system you do 
 - SDK exceptions and error enums are vendor types too: translate them into domain errors in the adapter.
 
 ## Verification checklist
-
-Run against generated code before finishing; fix and re-check any failure.
 
 - [ ] No vendor SDK/schema type crosses the adapter's public interface (params, returns, errors).
 - [ ] Every outbound call has explicit connect and read/total timeouts.

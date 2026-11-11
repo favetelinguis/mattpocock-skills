@@ -6,9 +6,9 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 
 - **[production-readiness-check](./production-readiness-check/SKILL.md)**: The blind review `explain-diff` runs, on parallel axes: documented standards, the originating spec, production readiness (via `infra-and-deploy` and `observability`), and, when the diff touches an external integration, integration resilience (via `external-integration-design`).
 - **[explain-diff](./explain-diff/SKILL.md)**: Explain a diff or PR in your own words, get grilled until your model matches the code, and leave with review comments (complements `code-review` and `grilling`).
-- **[external-integration-design](./external-integration-design/SKILL.md)**: Design resilient integrations with external systems and providers (complements `codebase-design` and `tdd` at third-party boundaries).
-- **[infra-and-deploy](./infra-and-deploy/SKILL.md)**: Trace app-to-infrastructure chains across Helm, Kubernetes, AWS, Azure, Terraform, Bicep, Docker, and CI/CD, and surface what only a live deploy can verify (complements `implement`, `tdd`, and `wizard`).
-- **[observability](./observability/SKILL.md)**: Instrument production code with structured logging, RED and USE metrics, OpenTelemetry tracing, symptom-based alerts, and runbooks (complements `diagnosing-bugs` and `implement`).
+- **[external-integration-design](./external-integration-design/SKILL.md)**: Design resilient integrations with external systems and providers (called by `production-readiness-check`).
+- **[infra-and-deploy](./infra-and-deploy/SKILL.md)**: Trace app-to-infrastructure chains across Helm, Kubernetes, AWS, Azure, Terraform, Bicep, Docker, and CI/CD, and surface what only a live deploy can verify (called by `production-readiness-check`).
+- **[observability](./observability/SKILL.md)**: Instrument production code with structured logging, RED and USE metrics, OpenTelemetry tracing, symptom-based alerts, and runbooks (called by `production-readiness-check`).
 - **[setup-matt-skills-with-beads](./setup-matt-skills-with-beads/SKILL.md)**: Configure a repo for the engineering skills with a personal beads_rust (`br`) tracker kept out of git, wired through one block in the global `AGENTS.md` (replaces `setup-matt-pocock-skills`).
 
 ## How they fit into Matt's flow
@@ -16,9 +16,13 @@ Matt's upstream skills own the core development loop (`grill-with-docs` -> `to-s
 | Upstream stage | Matt's skills | How `favetelinguis` complements it |
 |---|---|---|
 | **Setup & Tracker** | `setup-matt-pocock-skills`, `triage`, `wayfinder` | `setup-matt-skills-with-beads` replaces upstream setup: a personal `.beads/` excluded through `.git/info/exclude`, and a beads tracker doc adding `discovered-from`, `--external-ref`, native acceptance criteria, priority, and defer |
-| **Spec & Slices** | `grill-with-docs`, `to-spec`, `to-tickets` | `infra-and-deploy` and `observability` separate locally testable seams from deploy-only seams and enforce expand-contract ticket ordering |
-| **Build** | `implement`, `tdd`, `codebase-design`, `wizard` | `external-integration-design`, `observability`, and `infra-and-deploy` guide adapter resilience, permanent telemetry, and full `App -> Container -> Helm/K8s -> Cloud IaC -> CI/CD` parity |
-| **Review & Diagnose** | `code-review`, `diagnosing-bugs` | `explain-diff` aligns the human reviewer's mental model with the diff, using `production-readiness-check` as its blind review; `observability` turns temporary debug probes into permanent signals |
+| **Spec & Slices** | `grill-with-docs`, `to-spec`, `to-tickets` | Unchanged: specs and tickets stay focused on behaviour |
+| **Build** | `implement`, `tdd`, `codebase-design`, `wizard` | Unchanged: the implementer stays lean and focused on code |
+| **Review & Diagnose** | `code-review`, `diagnosing-bugs` | `code-review` stays the per-change code review; `explain-diff` runs `production-readiness-check` as the final check once every change is in place, and that check calls `infra-and-deploy`, `observability`, and `external-integration-design` |
+
+## Lean build, wide final check
+
+The implementer and its per-change review (`implement`, `tdd`, `code-review`) should stay lean and focused on code: does it do what the ticket asks, and does it follow the repo's standards. Production concerns (infrastructure and deployment parity, observability, external-integration resilience) only make sense against the whole change, so they wait until every change is in place. Then `explain-diff` runs `production-readiness-check` as the final check over all the new commits, and that is the only place `infra-and-deploy`, `observability`, and `external-integration-design` are called. Their descriptions are kept minimal so they do not fire during the build.
 
 ## Linking skills
 

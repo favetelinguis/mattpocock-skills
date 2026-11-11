@@ -85,7 +85,7 @@ Issue every sub-agent call together (Standards, Spec, Production, and Integratio
 
 - The diff command and commit list.
 - The instruction to call the Skill tool twice, for "infra-and-deploy" and "observability", and to review the diff against both skills.
-- The brief: "Report, per file/hunk where relevant: (a) infrastructure and deployment gaps: the app-to-infrastructure chain left incomplete (environment variables, secrets, ports, probes, permissions, cloud resources, CI/CD), unsafe migrations or rollout ordering, and what only a live deploy can verify; (b) observability gaps: new endpoints, jobs, queues, or external calls lacking structured logs, RED or USE metrics, traces, alerts, or runbooks, and debug probes that should become permanent signals. Cite the skill each finding comes from. Distinguish blockers from recommendations. If the diff has no production surface, say so. Under 400 words."
+- The brief: "Report, per file/hunk where relevant: (a) infrastructure and deployment gaps: the app-to-infrastructure chain left incomplete (environment variables, secrets, ports, probes, permissions, cloud resources, CI/CD), unsafe migrations or rollout ordering, and, for any Tier 2 or Tier 3 change, the Unverified Until Deploy list (what only a live deploy can verify, the pre-apply plan command, and the rollback command); (b) observability gaps: new endpoints, jobs, queues, or external calls lacking structured logs, RED or USE metrics, traces, alerts, or runbooks, and debug probes that should become permanent signals. Cite the skill each finding comes from. Distinguish blockers from recommendations. If the diff has no production surface, say so. Under 400 words."
 
 **Integration sub-agent prompt** should include:
 
