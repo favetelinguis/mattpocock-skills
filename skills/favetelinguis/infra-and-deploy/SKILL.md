@@ -1,6 +1,6 @@
 ---
 name: infra-and-deploy
-description: "Trace, validate, and safely roll out changes in repositories with co-located infrastructure or deployment code. Use when a repo contains or modifies Helm charts, Kubernetes manifests, Kustomize, Terraform, OpenTofu, Azure Bicep or ARM, AWS CDK, CloudFormation, or SAM, Pulumi, Dockerfiles, database migrations, or CI/CD workflows, or when application code changes environment variables, secrets, ports, health probes, IAM or RBAC permissions, queues, or cloud resources."
+description: "Trace, validate, and safely roll out changes in repositories with co-located infrastructure or deployment code. Use when a repo contains or modifies Helm charts, Kubernetes manifests, Kustomize, Terraform, OpenTofu, Azure Bicep or ARM, AWS CDK, CloudFormation, or SAM, Pulumi, Dockerfiles, database migrations, or CI/CD workflows, or when application code changes HTTP routes, environment variables, secrets, ports, health probes, IAM or RBAC permissions, queues, or cloud resources."
 ---
 
 # Infrastructure and Deployment
@@ -35,11 +35,11 @@ Scan the repository before making changes to locate every layer that governs run
 Whenever you change application code that touches runtime boundaries, or change infrastructure code directly, trace the impact across all five layers:
 
 ```text
-1. Application Code   (env vars, secrets, ports, /healthz + /readyz, SIGTERM drain, SDK calls, DB/queue schemas)
+1. Application Code   (HTTP routes + API contract, env vars, secrets, ports, /healthz + /readyz, SIGTERM drain, SDK calls, DB/queue schemas)
         │
 2. Container Image    (Dockerfile EXPOSE, build args, runtime packages, non-root user, entrypoint)
         │
-3. Workload Manifest  (Helm values*.yaml + templates: env, secret refs, probes, resources, ServiceAccount, Ingress/NetPol)
+3. Workload Manifest  (Helm values*.yaml + templates: env, secret refs, probes, resources, ServiceAccount, Ingress/Gateway routes, NetPol)
         │
 4. Cloud IaC          (Terraform / Bicep / CDK: IAM Role / Azure Managed Identity, KeyVault / Secrets Manager, DB/Queue/Storage, VNet/VPC)
         │
@@ -49,6 +49,7 @@ Whenever you change application code that touches runtime boundaries, or change 
 Check every link in the chain:
 
 - **Config and secret parity**: a new or renamed environment variable or secret in application code must be wired through `.env.example`, Dockerfile (if build-time), every environment's `values*.yaml` and K8s secret/configmap reference, Cloud IaC secret store outputs, and CI workflow `secrets.*` / `vars.*`.
+- **Route and contract parity**: a new, renamed, or changed HTTP route (path, method, parameters, request or response shape, auth) is invisible to callers until every layer that publishes or admits it agrees. Whatever the language or framework, find and update: the API contract or spec (OpenAPI, AsyncAPI, GraphQL schema, protobuf) whether hand-written or generated from code, plus any committed generated artifact, client SDK, or contract test built from it; and every layer that routes traffic by path, such as Kubernetes `Ingress` or Gateway API `HTTPRoute`, service mesh routes, API gateways (AWS API Gateway, Azure API Management, Kong), load balancer rules, and CDN or WAF path allowlists, wherever they are defined (Helm, Terraform, Bicep, CDK, or vendor config). Check the per-route settings too: auth policy, CORS, rate limits, timeouts, body size limits, and rewrites. A removed or changed route follows expand-contract (step 3) so existing callers keep working through the rollout.
 - **Identity and least-privilege parity**: a new cloud SDK call (S3, SQS, DynamoDB, Azure Blob, Service Bus, KeyVault, CosmosDB) mocked in unit tests must have its exact action and resource scope added to the IAM policy, OIDC trust, or Azure RBAC role assignment in IaC.
 - **Lifecycle and probe parity**: application startup time, port, `/healthz` (liveness), `/readyz` (readiness), and `SIGTERM` shutdown duration must match the container `EXPOSE`, K8s probe paths/timeouts, and `terminationGracePeriodSeconds`.
 

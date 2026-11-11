@@ -20,5 +20,5 @@ Match the base's invocation unless the delta changes who should reach the skill.
 
 - **Not promoted.** Personal skills stay out of the top-level `README.md`, `.claude-plugin/plugin.json`, `docs/`, and `ask-matt`.
 - **Bucket README.** List each skill in this folder's `README.md` as a flat list with a one-line description, the name linked to its `SKILL.md`, as `misc/` and `in-progress/` do.
-- **Names.** Give each skill a name distinct from every upstream skill: `link-skills.sh` links by folder name into `~/.agents/skills`, so a shared name replaces the upstream link.
+- **Names.** Give each skill a name distinct from every upstream skill unless the human explicitly requests otherwise. `link-skills.sh` links by folder name into `~/.agents/skills`, so a shared name replaces the upstream link.
 - **Install.** Add `favetelinguis/<name>` to the `skills` list in `link-skills.sh`.
