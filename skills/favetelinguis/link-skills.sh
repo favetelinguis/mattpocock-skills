@@ -3,6 +3,13 @@ set -euo pipefail
 
 skills_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 destination="$HOME/.agents/skills"
+scripts_root="$skills_root/favetelinguis/scripts"
+bin_destination="$HOME/.local/bin"
+
+# Executables in favetelinguis/scripts/ to link into $bin_destination.
+scripts=(
+  wt-review
+)
 
 # Add, remove, or comment out entries here, then rerun this script.
 skills=(
@@ -69,3 +76,29 @@ for source in "$skills_root"/{engineering,productivity,favetelinguis}/*; do
     echo "Unlinked $relative"
   fi
 done
+
+# ~/.local/bin is on PATH by default on most Linux distros; add it on macOS.
+mkdir -p -- "$bin_destination"
+
+for source in "$scripts_root"/*; do
+  [[ -f "$source" ]] || continue
+  name="${source##*/}"
+  target="$bin_destination/$name"
+
+  if [[ " ${scripts[*]} " == *" $name "* ]]; then
+    if [[ -e "$target" && ! -L "$target" ]]; then
+      echo "Refusing to overwrite: $target" >&2
+      exit 1
+    fi
+    chmod +x -- "$source"
+    ln -sfn -- "$source" "$target"
+    echo "Linked scripts/$name"
+  elif [[ -L "$target" && "$(readlink -- "$target")" == "$source" ]]; then
+    unlink -- "$target"
+    echo "Unlinked scripts/$name"
+  fi
+done
+
+if [[ ":$PATH:" != *":$bin_destination:"* ]]; then
+  echo "Note: add $bin_destination to PATH, e.g. in ~/.zshrc: export PATH=\"\$HOME/.local/bin:\$PATH\"" >&2
+fi

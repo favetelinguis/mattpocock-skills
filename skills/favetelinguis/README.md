@@ -36,6 +36,10 @@ Edit the `skills` list in the script to choose what is installed. All 30 selecte
 
 Running the script repeatedly is safe. It replaces selected symlinks, refuses to overwrite real files or directories, and only removes deselected links pointing to this checkout. Unrelated skills stay installed.
 
+The same script links the executables listed in its `scripts` array from [scripts/](./scripts) into `~/.local/bin`. On macOS, add `~/.local/bin` to `PATH`; the script prints a note when it is missing.
+
+- **[wt-review](./scripts/wt-review)**: `wt review <pr-number|branch>` opens a throwaway worktree where the whole change shows as unstaged edits, so any editor's gutter and diff view drive the review. Needs `wt` and, for PR numbers, `gh`. Finish with `wt remove --force review/<target>`.
+
 ## Mise install setup
 
 Tools are installed with [mise](https://mise.jdx.dev). The personal config lives at `~/.config/mise/config.toml`, outside this repository. Every tool is set to `"latest"`, so `mise install` fetches the newest release.

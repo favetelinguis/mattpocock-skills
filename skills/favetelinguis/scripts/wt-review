@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Review a PR or branch as uncommitted changes in a throwaway worktree.
+#
+# usage: wt review <pr-number|branch|ref>
+#
+# Creates branch review/<target> from the target, resets it (mixed) to the
+# merge-base with the PR's base branch, and marks new files intent-to-add, so
+# every editor's gutter and diff view show the whole change as unstaged.
+# Opens $EDITOR on the worktree; an Emacs $EDITOR opens magit-status there.
+# The reset only moves the throwaway branch, never the reviewed one.
+#
+# Done: wt remove --force review/<target>
+# The branch sits at the merge-base, so wt sees it as merged and deletes it.
+set -euo pipefail
+
+if [[ $# -ne 1 || $1 == -h || $1 == --help ]]; then
+  sed -n '2,13s/^# \{0,1\}//p' "$0" >&2
+  exit 2
+fi
+
+target=$1
+branch="review/${target//\//-}"
+# Shell snippet run inside the worktree. $EDITOR is word-split on purpose so
+# values like 'env TERM=xterm-direct emacsclient -nw' work.
+open_editor='
+  case ${EDITOR:-vi} in
+    *emacs*)
+      # 24-bit colour in terminal Emacs, as in ~/.bashrc, whatever $EDITOR says.
+      if infocmp xterm-direct >/dev/null 2>&1; then export TERM=xterm-direct; fi
+      dir=$(printf %s "$PWD" | sed '\''s/[\"]/\\&/g'\'')
+      exec ${EDITOR} --eval "(magit-status \"$dir\")" ;;
+    *) exec ${EDITOR:-vi} . ;;
+  esac'
+
+# Reopen an existing review without resetting it again.
+if git show-ref --verify --quiet "refs/heads/$branch"; then
+  exec wt switch "$branch" -x sh -- -c "$open_editor"
+fi
+
+git fetch --quiet origin
+if [[ $target =~ ^[0-9]+$ ]]; then
+  src="pr:$target"
+  base="origin/$(gh pr view "$target" --json baseRefName -q .baseRefName)"
+else
+  src=$target
+  base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD || echo origin/main)
+fi
+
+exec wt switch --create "$branch" --base "$src" --no-hooks -x sh -- -c '
+  git reset --quiet "$(git merge-base "$1" HEAD)" &&
+  git add --intent-to-add --ignore-removal . &&
+  git diff --stat HEAD &&
+  '"$open_editor"'
+' sh "$base"
